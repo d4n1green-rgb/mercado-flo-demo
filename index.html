@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercado Flo — Demo | Angel Systems</title>
+<meta name="description" content="Demo visual del sistema POS Mercado Flo. Desarrollado por Angel Systems.">
+<style>
+:root{
+  --primary:#1e2a38; --primary-2:#2c3e50;
+  --accent:#27ae60; --accent-dark:#1e8449; --accent-soft:rgba(39,174,96,.12);
+  --danger:#e74c3c; --danger-dark:#c0392b;
+  --warning:#f39c12; --info:#3498db;
+  --purple:#8e44ad; --purple-soft:rgba(142,68,173,.12);
+  --bg:#f4f6f9; --card:#ffffff;
+  --text:#2c3e50; --muted:#7f8c8d; --soft:#bdc3c7;
+  --line:#e1e6ec; --line-strong:#cfd6de;
+  --shadow:0 4px 14px rgba(30,42,56,.06);
+  --shadow-h:0 6px 22px rgba(30,42,56,.10);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  background:var(--bg); color:var(--text);
+  display:flex; height:100vh; overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  padding-top:36px;
+}
+button{font-family:inherit}
+input,select{font-family:inherit}
+
+/* ============ BANNER DEMO ============ */
+.demo-banner{
+  position:fixed; top:0; left:0; right:0; z-index:10000;
+  background:linear-gradient(90deg,#f39c12,#d68910);
+  color:#fff; text-align:center; padding:8px 16px;
+  font-weight:800; font-size:.78rem; letter-spacing:1px;
+  text-transform:uppercase;
+  box-shadow:0 3px 12px rgba(243,156,18,.4);
+  pointer-events:none;
+}
+.demo-banner::before{content:'🔒 '; margin-right:6px}
+
+.sidebar{
+  width:240px; flex-shrink:0;
+  background:linear-gradient(180deg,#1e2a38 0%,#243244 100%);
+  color:#ecf0f1; display:flex; flex-direction:column;
+  overflow-y:auto;
+}
+.brand{padding:26px 20px 22px; text-align:center; border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{
+  margin:0; font-size:20px; letter-spacing:5px; font-weight:900;
+  background:linear-gradient(90deg,#2ecc71 0%,#27ae60 40%,#f39c12 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 2px 8px rgba(46,204,113,.35));
+  line-height:1.1;
+}
+.brand-sub{display:block; margin-top:6px; font-size:.62rem; letter-spacing:3px;
+  text-transform:uppercase; color:rgba(255,255,255,.35); font-weight:700}
+.nav{display:flex; flex-direction:column; padding:14px 0; flex:1}
+.nav-btn{
+  background:none; border:none; color:#b8c4d2;
+  padding:13px 20px; text-align:left; font-size:14px; font-weight:600;
+  cursor:pointer; transition:.18s;
+  border-left:3px solid transparent;
+  display:flex; align-items:center; gap:10px;
+}
+.nav-btn:hover{background:rgba(255,255,255,.05); color:#fff; border-left-color:rgba(46,204,113,.35)}
+.nav-btn.active{
+  background:linear-gradient(90deg,rgba(46,204,113,.15),transparent);
+  color:#fff; border-left-color:var(--accent);
+}
+.credit{
+  text-align:center; font-size:.6rem; color:rgba(255,255,255,.4);
+  letter-spacing:1.8px; text-transform:uppercase;
+  padding:22px 8px 16px; font-weight:700;
+  text-shadow:0 2px 4px rgba(0,0,0,.5);
+  line-height:1.7;
+}
+.credit .credit-licencia{
+  display:block; margin-top:6px;
+  color:rgba(46,204,113,.85);
+  font-size:.58rem;
+  letter-spacing:1px;
+  font-weight:800;
+}
+.credit .volver{
+  display:inline-block; margin-top:12px;
+  padding:7px 14px;
+  background:rgba(46,204,113,.15);
+  border:1px solid rgba(46,204,113,.35);
+  color:#2ecc71; text-decoration:none;
+  border-radius:7px; font-size:.6rem;
+  letter-spacing:1.5px; font-weight:800;
+  text-transform:uppercase;
+  transition:.15s;
+}
+.credit .volver:hover{background:rgba(46,204,113,.25)}
+
+.main-content{flex:1; overflow-y:auto; padding:26px 28px 60px}
+.section{display:none; animation:fade .25s ease}
+.section.active{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+
+.page-title{
+  margin:0 0 20px; font-size:1.35rem; color:var(--primary);
+  display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+}
+.page-title .sub{font-size:.78rem; color:var(--muted); font-weight:500}
+
+.btn{
+  padding:10px 16px;
+  border:none; border-radius:8px; cursor:pointer;
+  font-weight:700; font-size:.85rem; color:#fff;
+  background:var(--primary);
+  transition:.15s; display:inline-flex; align-items:center;
+  gap:6px; justify-content:center;
+}
+.btn:hover{transform:translateY(-1px); filter:brightness(1.05)}
+.btn-block{width:100%; margin-bottom:10px}
+.btn-success{background:linear-gradient(135deg,#27ae60,#1e8449)}
+.btn-danger{background:linear-gradient(135deg,#e74c3c,#c0392b)}
+.btn-warning{background:linear-gradient(135deg,#f39c12,#d68910)}
+.btn-primary{background:linear-gradient(135deg,#2c3e50,#1e2a38)}
+.btn-purple{background:linear-gradient(135deg,#8e44ad,#6c3483)}
+.btn-ghost{background:transparent; color:var(--text); border:1px solid var(--line-strong)}
+.btn-ghost:hover{background:#eef2f6}
+.btn-sm{padding:6px 11px; font-size:.78rem}
+
+.mini{
+  background:#eef2f6; border:1px solid var(--line); color:var(--text);
+  width:32px; height:32px; border-radius:7px; cursor:pointer;
+  font-size:.85rem; font-weight:800; line-height:1;
+  display:inline-flex; align-items:center; justify-content:center;
+  transition:.15s; padding:0; flex-shrink:0;
+}
+.mini:hover{background:#e0e6ee; transform:translateY(-1px)}
+.mini.del{color:var(--danger)}
+.mini.del:hover{background:#fdecea}
+.mini.back{color:var(--info)}
+.mini.back:hover{background:#eaf4fc}
+.mini.restore{color:var(--accent-dark)}
+.mini.restore:hover{background:var(--accent-soft)}
+
+.pos-container{display:flex; gap:20px; align-items:flex-start}
+.product-grid-container{
+  flex:2; background:var(--card); border-radius:14px;
+  padding:18px; box-shadow:var(--shadow); min-width:0;
+}
+.cart-container{
+  flex:1; min-width:320px;
+  background:var(--card); border-radius:14px;
+  padding:18px; box-shadow:var(--shadow);
+  display:flex; flex-direction:column;
+  position:sticky; top:0;
+}
+.cart-container h3{margin:0 0 12px; font-size:1rem; color:var(--primary)}
+.cart-container.cart-traslado h3{color:var(--accent-dark)}
+.cart-container.cart-traslado .cart-total{color:var(--accent-dark)}
+.cart-container.cart-retiro h3{color:var(--purple)}
+.cart-container.cart-retiro .cart-total{color:var(--purple)}
+
+.search-wrap{position:relative; margin-bottom:14px}
+.search-wrap input{
+  width:100%; padding:12px 14px 12px 40px;
+  border:1px solid var(--line-strong); border-radius:10px;
+  font-size:.95rem; background:#fbfcfd;
+}
+.search-wrap::before{
+  content:'🔍'; position:absolute; left:14px; top:50%;
+  transform:translateY(-50%); font-size:.95rem; opacity:.5;
+}
+.search-row{display:flex; gap:10px; align-items:center; margin-bottom:14px}
+.search-row .search-wrap{flex:1; margin-bottom:0}
+.view-toggle{
+  display:inline-flex; gap:2px; padding:3px;
+  background:#eef2f6; border:1px solid var(--line);
+  border-radius:9px; flex-shrink:0;
+}
+.view-toggle button{
+  background:transparent; border:none; padding:6px 12px;
+  border-radius:6px; cursor:pointer; font-family:inherit;
+  font-size:.95rem; font-weight:800; color:var(--muted);
+  transition:.15s; line-height:1;
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:38px; min-height:30px;
+}
+.view-toggle button.active{
+  background:#fff; color:var(--primary);
+  box-shadow:0 1px 4px rgba(30,42,56,.12);
+}
+.cat-chips{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px}
+.chip{
+  background:#eef2f6; border:1px solid var(--line); color:var(--muted);
+  padding:7px 13px; border-radius:999px; cursor:pointer;
+  font-size:.78rem; font-weight:700; transition:.15s;
+}
+.chip.active{
+  background:linear-gradient(135deg,#2c3e50,#1e2a38); color:#fff;
+  border-color:transparent; box-shadow:0 3px 10px rgba(30,42,56,.22);
+}
+.product-grid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+  gap:10px;
+}
+.product-card{
+  background:linear-gradient(160deg,#fbfcfd 0%,#eef2f6 100%);
+  border:1px solid var(--line); border-radius:11px;
+  padding:12px 12px 10px; cursor:pointer; transition:.18s;
+  position:relative; overflow:hidden;
+}
+.product-card:hover{
+  transform:translateY(-3px); border-color:var(--accent);
+  box-shadow:0 8px 20px rgba(39,174,96,.14);
+}
+.product-card.disabled{opacity:.45; cursor:not-allowed; pointer-events:none}
+.pc-cat{
+  position:absolute; top:6px; right:6px;
+  font-size:.58rem; letter-spacing:.5px; text-transform:uppercase;
+  background:rgba(44,62,80,.08); color:var(--muted);
+  padding:2px 6px; border-radius:4px; font-weight:800;
+}
+.product-card h4{
+  margin:6px 0 4px; font-size:.85rem; color:var(--primary); line-height:1.25;
+  padding-right:52px;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden; word-break:break-word; min-height:2.3em;
+}
+.pc-price{margin:0 0 4px; font-weight:800; color:var(--accent); font-size:1.05rem}
+.pc-stock{font-size:.7rem; color:var(--muted); font-weight:600}
+.pc-stock.low{color:var(--warning); font-weight:800}
+.pc-stock.zero{color:var(--danger); font-weight:800}
+
+.cart-table{width:100%; border-collapse:collapse; font-size:.85rem; margin-bottom:10px}
+.cart-table thead{background:#f4f6f9}
+.cart-table th{
+  padding:8px 6px; text-align:left; font-size:.68rem;
+  text-transform:uppercase; letter-spacing:.5px;
+  color:var(--muted); font-weight:800; border-bottom:1px solid var(--line);
+}
+.cart-table td{padding:9px 6px; border-bottom:1px solid var(--line); vertical-align:middle}
+.ci-name{font-weight:700; font-size:.85rem; color:var(--primary)}
+.ci-price{font-size:.68rem; color:var(--muted); margin-top:1px}
+.ci-qty{display:flex; align-items:center; gap:6px; justify-content:center; white-space:nowrap}
+.ci-sub{text-align:right; font-weight:800; color:var(--accent); white-space:nowrap}
+.empty-row{text-align:center; color:var(--muted); padding:22px 8px; font-style:italic; font-size:.82rem}
+.cart-total{
+  font-size:1.6rem; font-weight:900; color:var(--accent);
+  text-align:right; padding:12px 4px 6px;
+  border-top:2px dashed var(--line); margin-top:auto;
+}
+.cart-meta{font-size:.72rem; color:var(--muted); text-align:right; margin-top:-4px; font-weight:600}
+.cart-actions{display:flex; flex-direction:column; gap:8px; margin-top:8px}
+
+input.ci-qty-input{
+  width:60px; min-width:60px; max-width:60px; flex:0 0 auto;
+  text-align:center; padding:6px 4px; font-size:.9rem; font-weight:800;
+  border:1px solid var(--line-strong); border-radius:7px;
+  background:#fff; color:var(--primary);
+  font-variant-numeric:tabular-nums; font-family:inherit;
+  line-height:1.2; box-sizing:border-box;
+}
+
+.report-box{
+  background:var(--card); padding:20px; border-radius:14px;
+  box-shadow:var(--shadow); margin-bottom:20px;
+}
+.report-box h3{margin:0 0 14px; font-size:1rem; color:var(--primary)}
+.form-row{display:flex; gap:12px; flex-wrap:wrap}
+.form-row .form-group{flex:1; min-width:130px}
+.form-group{margin-bottom:12px}
+.form-group label{
+  display:block; font-size:.68rem; font-weight:800;
+  text-transform:uppercase; letter-spacing:.5px;
+  color:var(--muted); margin-bottom:5px;
+}
+input[type="text"], input[type="number"], input[type="date"], select{
+  width:100%; padding:10px 12px;
+  border:1px solid var(--line-strong); border-radius:8px;
+  font-size:.9rem; background:#fbfcfd; color:var(--text);
+}
+.inline-check{
+  display:flex; align-items:center; gap:8px;
+  font-size:.82rem; font-weight:600; color:var(--muted);
+  cursor:pointer; user-select:none;
+}
+.inline-check input[type="checkbox"]{
+  width:auto; margin:0; cursor:pointer; accent-color:var(--accent);
+}
+.quick-dates{display:flex; gap:6px; flex-wrap:wrap; margin-top:2px}
+.quick-dates button{
+  background:#eef2f6; border:1px solid var(--line); color:var(--muted);
+  padding:6px 11px; border-radius:999px; cursor:pointer;
+  font-size:.72rem; font-weight:700; transition:.15s;
+}
+.quick-dates button.active{
+  background:linear-gradient(135deg,#2c3e50,#1e2a38); color:#fff;
+  border-color:transparent;
+}
+
+.form-tabs{
+  display:flex; gap:6px; margin-bottom:18px;
+  border-bottom:2px solid var(--line);
+  overflow-x:auto;
+}
+.form-tab{
+  background:none; border:none; padding:10px 16px; cursor:pointer;
+  font-weight:700; font-size:.88rem; color:var(--muted);
+  border-bottom:3px solid transparent; margin-bottom:-2px;
+  transition:.15s; font-family:inherit;
+  display:inline-flex; align-items:center; gap:6px;
+  white-space:nowrap; flex-shrink:0;
+}
+.form-tab.active{color:var(--primary); border-bottom-color:var(--accent)}
+.form-tab[data-formtab="mermas"].active{color:var(--danger); border-bottom-color:var(--danger)}
+.form-tab[data-tratab="retiros"].active{color:var(--purple); border-bottom-color:var(--purple)}
+.form-pane{display:none}
+.form-pane.active{display:block}
+
+.reab-filters{
+  background:#fbfcfd; border:1px solid var(--line); border-radius:11px;
+  padding:14px 16px; margin-bottom:14px;
+}
+.reab-info{
+  background:linear-gradient(135deg,rgba(52,152,219,.08),rgba(52,152,219,.02));
+  border:1px solid rgba(52,152,219,.25); border-radius:11px;
+  padding:14px 16px; margin-bottom:14px;
+}
+.reab-info-row{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px; flex-wrap:wrap; font-size:.85rem;
+}
+.reab-info-row + .reab-info-row{margin-top:8px; padding-top:8px; border-top:1px dashed var(--line)}
+.reab-info-lbl{color:var(--muted); font-weight:700; font-size:.75rem; text-transform:uppercase}
+.reab-info-val{font-weight:800; color:var(--primary); font-size:.95rem}
+.reab-info-val.green{color:var(--accent)}
+.reab-info-val.blue{color:var(--info)}
+
+.reab-total-box{
+  background:linear-gradient(135deg,rgba(39,174,96,.08),rgba(39,174,96,.02));
+  border:1px solid rgba(39,174,96,.25); border-radius:11px;
+  padding:14px 16px; margin-top:14px;
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px; flex-wrap:wrap;
+}
+.reab-total-box .lbl{
+  font-size:.68rem; color:var(--muted); text-transform:uppercase;
+  letter-spacing:.6px; font-weight:800;
+}
+.reab-total-box .val{
+  font-size:1.6rem; font-weight:900; color:var(--accent);
+}
+.reab-total-box.merma{
+  background:linear-gradient(135deg,rgba(231,76,60,.08),rgba(231,76,60,.02));
+  border-color:rgba(231,76,60,.25);
+}
+.reab-total-box.merma .val{color:var(--danger)}
+.reab-total-box.retiro{
+  background:linear-gradient(135deg,rgba(142,68,173,.08),rgba(142,68,173,.02));
+  border-color:rgba(142,68,173,.25);
+}
+.reab-total-box.retiro .val{color:var(--purple)}
+
+.reab-help{
+  background:linear-gradient(135deg,rgba(243,156,18,.08),rgba(243,156,18,.02));
+  border:1px solid rgba(243,156,18,.25); border-radius:11px;
+  padding:12px 14px; margin-bottom:14px;
+  font-size:.78rem; line-height:1.5; color:var(--text);
+}
+.reab-help b{color:var(--warning)}
+.reab-help.merma{
+  background:linear-gradient(135deg,rgba(231,76,60,.08),rgba(231,76,60,.02));
+  border-color:rgba(231,76,60,.25);
+}
+.reab-help.merma b{color:var(--danger)}
+.reab-help.retiro{
+  background:linear-gradient(135deg,rgba(142,68,173,.08),rgba(142,68,173,.02));
+  border-color:rgba(142,68,173,.25);
+}
+.reab-help.retiro b{color:var(--purple)}
+
+.origen-group{display:flex; gap:10px; flex-wrap:wrap}
+.origen-opt{
+  flex:1; min-width:130px;
+  background:#fbfcfd; border:2px solid var(--line); border-radius:9px;
+  padding:10px 14px; cursor:pointer;
+  display:flex; align-items:center; gap:10px;
+  font-weight:700; font-size:.85rem; color:var(--muted);
+  user-select:none;
+}
+.origen-opt.selected{
+  border-color:var(--accent); color:var(--primary);
+  background:#fff; box-shadow:0 0 0 3px rgba(39,174,96,.13);
+}
+.origen-opt .dot{
+  width:14px; height:14px; border-radius:50%;
+  border:2px solid var(--line-strong); flex-shrink:0;
+}
+.origen-opt.selected .dot{
+  border-color:var(--accent);
+  background:radial-gradient(circle, var(--accent) 40%, transparent 45%);
+}
+.origen-stock{margin-left:auto; font-size:.72rem; color:var(--muted); font-weight:700}
+
+.inv-table{
+  width:100%; border-collapse:collapse;
+  background:var(--card); border-radius:14px;
+  overflow:hidden; box-shadow:var(--shadow); font-size:.85rem;
+}
+.inv-table th, .inv-table td{padding:11px 12px; text-align:left; border-bottom:1px solid var(--line)}
+.inv-table th{
+  background:linear-gradient(180deg,#2c3e50,#1e2a38);
+  color:#fff; font-size:.72rem; font-weight:800;
+  text-transform:uppercase; letter-spacing:.5px;
+}
+.inv-table tr:hover td{background:#f9fafb}
+.inv-table tr.row-warn td{background:#fff8ec}
+.id-col{font-weight:900; color:var(--primary)}
+.cell-low{color:var(--warning); font-weight:800}
+.actions-col{white-space:nowrap; width:1%; text-align:right}
+.actions-col .mini{margin-left:4px}
+.muted{color:var(--soft)}
+
+.inv-summary-bar{
+  margin-top:16px; padding:18px 22px;
+  background:linear-gradient(135deg,#1e2a38 0%,#2c3e50 100%);
+  border-radius:14px; box-shadow:var(--shadow);
+  color:#ecf0f1;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:18px;
+  align-items:center;
+}
+.isb-lbl{
+  display:block; font-size:.62rem; letter-spacing:.8px;
+  text-transform:uppercase; color:rgba(255,255,255,.5);
+  font-weight:800; margin-bottom:6px;
+}
+.isb-val{font-size:1.35rem; font-weight:900; color:#fff}
+.isb-val.green{color:#2ecc71}
+.isb-val.blue{color:#5dade2}
+.isb-val.orange{color:#f39c12}
+.isb-sub{font-size:.68rem; color:rgba(255,255,255,.45); margin-top:4px}
+
+.stat-mini-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px; margin-bottom:20px;
+}
+.stat-mini{
+  background:linear-gradient(160deg,#ffffff 0%,#f7fafc 100%);
+  border:1px solid var(--line); border-radius:12px;
+  padding:14px 16px; box-shadow:var(--shadow);
+}
+.sm-lbl{
+  display:block; font-size:.62rem; letter-spacing:.8px;
+  text-transform:uppercase; color:var(--muted); font-weight:800;
+  margin-bottom:6px;
+}
+.sm-val{font-size:1.35rem; font-weight:900; color:var(--primary)}
+.sm-val.green{color:var(--accent)}
+.sm-val.blue{color:var(--info)}
+.sm-val.orange{color:var(--warning)}
+.sm-val.red{color:var(--danger)}
+.sm-val.purple{color:var(--purple)}
+.sm-sub{font-size:.68rem; color:var(--muted); margin-top:4px}
+
+.tr-badge{
+  display:inline-block; padding:2px 8px; border-radius:999px;
+  font-size:.62rem; font-weight:800; letter-spacing:.4px;
+  text-transform:uppercase;
+}
+.tr-badge.in{background:var(--accent-soft); color:var(--accent-dark)}
+.tr-badge.out{background:#eaf4fc; color:var(--info)}
+
+.tr-row{
+  background:var(--card); border:1px solid var(--line); border-radius:11px;
+  padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow);
+}
+.tr-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap}
+.tr-fecha{font-weight:800; color:var(--primary); font-size:.88rem}
+.tr-meta{font-size:.72rem; color:var(--muted); margin-top:3px}
+.tr-units{text-align:right}
+.tr-units b{font-size:1.15rem; color:var(--accent)}
+.tr-units span{display:block; font-size:.68rem; color:var(--muted); margin-top:2px}
+
+.entrada-badge{
+  display:inline-block; padding:2px 8px; border-radius:999px;
+  font-size:.62rem; font-weight:800; letter-spacing:.4px;
+  text-transform:uppercase;
+}
+.entrada-badge.nuevo{background:var(--accent-soft); color:var(--accent-dark)}
+.entrada-badge.reposicion{background:#eaf4fc; color:var(--info)}
+
+.entrada-row{
+  background:var(--card); border:1px solid var(--line); border-radius:11px;
+  padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow);
+}
+.entrada-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap}
+.entrada-fecha{font-weight:800; color:var(--primary); font-size:.88rem}
+.entrada-meta{font-size:.72rem; color:var(--muted); margin-top:3px}
+.entrada-amount{text-align:right}
+.ea-total{font-weight:900; color:var(--primary); font-size:1.1rem}
+.ea-det{font-size:.7rem; color:var(--muted); margin-top:2px}
+
+.merma-badge{
+  display:inline-block; padding:2px 8px; border-radius:999px;
+  font-size:.62rem; font-weight:800; letter-spacing:.4px;
+  text-transform:uppercase;
+}
+.merma-badge.danado{background:var(--danger-soft, rgba(231,76,60,.1)); color:var(--danger-dark)}
+.merma-badge.vencido{background:#fff4e5; color:#b87333}
+.merma-badge.roto{background:#fdecea; color:var(--danger-dark)}
+.merma-badge.otro{background:#eef2f6; color:var(--muted)}
+
+.merma-row{
+  background:var(--card); border:1px solid var(--line); border-left:4px solid var(--danger);
+  border-radius:11px;
+  padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow);
+}
+.merma-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap}
+.merma-fecha{font-weight:800; color:var(--primary); font-size:.88rem}
+.merma-meta{font-size:.72rem; color:var(--muted); margin-top:3px}
+.merma-amount{text-align:right}
+.ma-total{font-weight:900; color:var(--danger); font-size:1.1rem}
+.ma-det{font-size:.7rem; color:var(--muted); margin-top:2px}
+
+.retiro-badge{
+  display:inline-block; padding:2px 8px; border-radius:999px;
+  font-size:.62rem; font-weight:800; letter-spacing:.4px;
+  text-transform:uppercase;
+  background:var(--purple-soft); color:var(--purple);
+}
+.retiro-row{
+  background:var(--card); border:1px solid var(--line); border-left:4px solid var(--purple);
+  border-radius:11px;
+  padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow);
+}
+.retiro-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap}
+.retiro-fecha{font-weight:800; color:var(--primary); font-size:.88rem}
+.retiro-meta{font-size:.72rem; color:var(--muted); margin-top:3px}
+.retiro-amount{text-align:right}
+.ra-total{font-weight:900; color:var(--purple); font-size:1.1rem}
+.ra-det{font-size:.7rem; color:var(--muted); margin-top:2px}
+
+.ventas-summary{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:16px}
+.ventas-summary > div{
+  background:var(--card); border:1px solid var(--line);
+  padding:14px; border-radius:11px; box-shadow:var(--shadow);
+}
+.vs-lbl{
+  display:block; font-size:.62rem; letter-spacing:.8px;
+  text-transform:uppercase; color:var(--muted); font-weight:800;
+  margin-bottom:6px;
+}
+.ventas-summary b{font-size:1.25rem; color:var(--primary)}
+.ventas-summary b.green{color:var(--accent)}
+
+.venta-row{
+  background:var(--card); border:1px solid var(--line); border-radius:11px;
+  padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow);
+}
+.venta-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap}
+.venta-fecha{font-weight:800; color:var(--primary); font-size:.88rem}
+.venta-meta{font-size:.72rem; color:var(--muted); margin-top:3px}
+.venta-amount{text-align:right}
+.va-total{font-weight:900; color:var(--accent); font-size:1.1rem}
+.va-gan{font-size:.7rem; color:var(--muted); margin-top:2px}
+.venta-det{margin-top:10px}
+.venta-det summary{
+  font-size:.75rem; color:var(--muted); cursor:pointer;
+  font-weight:700; list-style:none; padding:4px 0;
+}
+.venta-det summary::-webkit-details-marker{display:none}
+.venta-det summary::before{content:'▸ '; transition:.2s; display:inline-block}
+.venta-det[open] summary::before{transform:rotate(90deg)}
+.det-table{width:100%; border-collapse:collapse; margin-top:8px; font-size:.78rem}
+.det-table th{
+  text-align:left; padding:6px 8px; color:var(--muted);
+  font-size:.65rem; text-transform:uppercase; letter-spacing:.4px;
+  border-bottom:1px solid var(--line); font-weight:800;
+}
+.det-table td{padding:7px 8px; border-bottom:1px solid var(--line)}
+
+.cat-list{display:flex; flex-direction:column; gap:8px}
+.cat-row{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  background:var(--card); padding:12px 16px; border-radius:11px;
+  box-shadow:var(--shadow); border:1px solid var(--line);
+}
+.cat-name{font-weight:800; color:var(--primary); font-size:.95rem}
+.cat-count{font-size:.72rem; color:var(--muted); margin-top:2px}
+.cat-actions{display:flex; gap:6px; flex-shrink:0}
+
+#reportePreview pre{
+  background:#f4f6f9; padding:14px; border-radius:8px;
+  font-family:'Courier New',monospace; font-size:.78rem;
+  white-space:pre; overflow-x:auto; line-height:1.5;
+  color:var(--text); border:1px solid var(--line);
+}
+
+.toast-container{
+  position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+  z-index:9999; display:flex; flex-direction:column; gap:8px; align-items:center;
+  pointer-events:none; max-width:92vw;
+}
+.toast{
+  background:#1e2a38; border:1px solid rgba(255,255,255,.08);
+  border-left:3px solid var(--warning);
+  color:#ecf0f1; padding:11px 15px; border-radius:11px;
+  font-size:.85rem; font-weight:600;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  animation:slideUp .28s ease;
+  pointer-events:auto;
+}
+@keyframes slideUp{from{opacity:0; transform:translateY(22px)} to{opacity:1; transform:none}}
+
+@media (max-width: 900px){
+  body{flex-direction:column; height:auto; overflow:auto}
+  .sidebar{width:100%; flex-direction:row; overflow-x:auto; overflow-y:hidden; padding:0; align-items:center}
+  .brand{padding:14px 16px; border-bottom:none; border-right:1px solid rgba(255,255,255,.08); flex-shrink:0}
+  .logo{font-size:16px; letter-spacing:3px}
+  .brand-sub{display:none}
+  .nav{flex-direction:row; padding:0; flex:1; overflow-x:auto}
+  .nav-btn{
+    padding:16px 14px; white-space:nowrap;
+    border-left:none; border-bottom:3px solid transparent;
+    font-size:.82rem;
+  }
+  .nav-btn.active{border-left-color:transparent; border-bottom-color:var(--accent);
+    background:linear-gradient(0deg,rgba(46,204,113,.15),transparent)}
+  .credit{display:none}
+  .main-content{padding:16px; overflow:visible}
+  .pos-container{flex-direction:column}
+  .cart-container{position:static; width:100%}
+  .product-grid-container{width:100%}
+  .form-row{flex-direction:column}
+  .inv-table{font-size:.78rem}
+  .inv-table th, .inv-table td{padding:8px 8px}
+}
+@media (max-width: 520px){
+  .product-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+  .inv-table{display:block; overflow-x:auto; white-space:nowrap}
+  input.ci-qty-input{width:52px; min-width:52px; max-width:52px; font-size:.82rem}
+  .form-tab{padding:9px 12px; font-size:.8rem}
+}
+</style>
+</head>
+<body>
+
+<div class="demo-banner">Versión demostración — funciones deshabilitadas</div>
+
+<aside class="sidebar">
+  <div class="brand">
+    <h1 class="logo">MERCADO FLO</h1>
+    <span class="brand-sub">Sistema POS · Demo</span>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn active" data-section="pos">🛒 <span>Punto de Venta</span></button>
+    <button class="nav-btn" data-section="traslados">🔀 <span>Traslados</span></button>
+    <button class="nav-btn" data-section="inventario">📦 <span>Inventario</span></button>
+    <button class="nav-btn" data-section="categorias">🏷️ <span>Categorías</span></button>
+    <button class="nav-btn" data-section="historiales">🧾 <span>Historiales</span></button>
+    <button class="nav-btn" data-section="reportes">📊 <span>Reportes</span></button>
+  </nav>
+  <div class="credit">
+    Creado por: Angel
+    <span class="credit-licencia">Angel Systems</span>
+    <a href="https://angel-systems-web.pages.dev" class="volver">← Volver al portafolio</a>
+  </div>
+</aside>
+
+<main class="main-content">
+
+  <!-- ============ POS ============ -->
+  <section id="pos" class="section active">
+    <h2 class="page-title">🛒 Punto de Venta <span class="sub">Solo se vende lo que está en el IPV</span></h2>
+    <div class="pos-container">
+      <div class="product-grid-container">
+        <div class="search-row">
+          <div class="search-wrap">
+            <input type="text" placeholder="Buscar por nombre o ID..." readonly>
+          </div>
+          <div class="view-toggle">
+            <button type="button" class="active">▦</button>
+            <button type="button">☰</button>
+          </div>
+        </div>
+        <div class="cat-chips" id="catChipsPos"></div>
+        <div class="product-grid" id="productGrid"></div>
+      </div>
+      <div class="cart-container">
+        <h3>🧾 Carrito</h3>
+        <table class="cart-table">
+          <thead><tr><th>Producto</th><th style="text-align:center">Cant</th><th style="text-align:right">Subtotal</th><th></th></tr></thead>
+          <tbody id="cartItems"></tbody>
+        </table>
+        <div class="cart-total" id="cartTotal">$0.00</div>
+        <div class="cart-actions">
+          <button class="btn btn-success btn-block">✅ Finalizar Venta</button>
+          <button class="btn btn-danger btn-block">❌ Vaciar Carrito</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRASLADOS ============ -->
+  <section id="traslados" class="section">
+    <h2 class="page-title">🔀 Traslados <span class="sub">Mueve stock del almacén al IPV o retira para ti</span></h2>
+    <div class="form-tabs">
+      <button class="form-tab active" data-tratab="traslados">🔀 Traslados al IPV</button>
+      <button class="form-tab" data-tratab="retiros">🏠 Para mí</button>
+    </div>
+
+    <div class="form-pane active" id="pane-traslados">
+      <div class="stat-mini-grid" id="ipvStats"></div>
+      <div class="pos-container" style="margin-bottom:22px">
+        <div class="product-grid-container">
+          <h3 style="margin:0 0 12px; color:var(--primary); font-size:1rem">Nuevo traslado · elige productos del almacén</h3>
+          <div class="search-row">
+            <div class="search-wrap">
+              <input type="text" placeholder="Buscar por nombre o ID..." readonly>
+            </div>
+            <div class="view-toggle">
+              <button type="button" class="active">▦</button>
+              <button type="button">☰</button>
+            </div>
+          </div>
+          <div class="cat-chips" id="catChipsTraslado"></div>
+          <div class="product-grid" id="trasladoGrid"></div>
+        </div>
+        <div class="cart-container cart-traslado">
+          <h3>🔀 A trasladar</h3>
+          <table class="cart-table">
+            <thead><tr><th>Producto</th><th style="text-align:center">Cant</th><th style="text-align:right">Costo</th><th></th></tr></thead>
+            <tbody id="trasladoItems"></tbody>
+          </table>
+          <div class="cart-total" id="trasladoTotal">$0.00</div>
+          <div class="cart-meta" id="trasladoMeta">0 unidades</div>
+          <div class="cart-actions">
+            <button class="btn btn-success btn-block">🔀 Confirmar Traslado al IPV</button>
+            <button class="btn btn-ghost btn-block">Vaciar</button>
+          </div>
+        </div>
+      </div>
+      <div class="report-box" style="padding:0; overflow:hidden">
+        <div style="padding:16px 20px 4px">
+          <h3 style="margin:0">📦 En el IPV ahora mismo</h3>
+          <p style="margin:4px 0 0; font-size:.78rem; color:var(--muted)">
+            Stock que está en el área de venta sin vender. Puedes devolverlo al almacén si trajiste de más.
+          </p>
+        </div>
+        <table class="inv-table" style="border-radius:0; box-shadow:none">
+          <thead>
+            <tr>
+              <th>ID</th><th>Producto</th><th>Categoría</th>
+              <th style="text-align:right">Unidades</th>
+              <th style="text-align:right">Valor (costo)</th>
+              <th style="text-align:right">Valor (venta)</th>
+              <th style="text-align:right">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="ipvTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="form-pane" id="pane-retiros">
+      <div class="reab-help retiro">
+        <b>🏠 Para mí:</b> toca los productos que necesites para tu uso personal y se irán agregando al carrito.
+        Elige para cada uno si sale del <b>almacén</b> o del <b>IPV</b>. Al registrar, quedará todo en un solo retiro.
+      </div>
+      <div class="pos-container" style="margin-bottom:22px">
+        <div class="product-grid-container">
+          <div class="search-row">
+            <div class="search-wrap">
+              <input type="text" placeholder="Buscar por nombre o ID..." readonly>
+            </div>
+          </div>
+          <div class="cat-chips" id="retChips"></div>
+          <div class="product-grid" id="retGrid"></div>
+        </div>
+        <div class="cart-container cart-retiro">
+          <h3>🏠 A retirar</h3>
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th style="text-align:center">Cant</th>
+                <th style="text-align:center">Origen</th>
+                <th style="text-align:right">Costo</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="retItems"></tbody>
+          </table>
+          <div class="cart-total" id="retTotal">$0.00</div>
+          <div class="cart-meta" id="retMeta">0 unidades</div>
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group" style="width:100%;margin-bottom:0">
+              <label style="font-size:.62rem">Nota (opcional)</label>
+              <input type="text" placeholder="Ej: para la comida del domingo" readonly>
+            </div>
+          </div>
+          <div class="cart-actions">
+            <button class="btn btn-purple btn-block">🏠 Registrar retiro</button>
+            <button class="btn btn-ghost btn-block">Vaciar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INVENTARIO ============ -->
+  <section id="inventario" class="section">
+    <h2 class="page-title">📦 Inventario <span class="sub">Puedes asignar el ID que quieras · se ordenan automáticamente</span></h2>
+
+    <div class="report-box">
+      <div class="form-tabs">
+        <button class="form-tab active" data-formtab="nuevo">➕ Nuevo Producto</button>
+        <button class="form-tab" data-formtab="reabastecer">📥 Reabastecer</button>
+        <button class="form-tab" data-formtab="mermas">⚠️ Registrar merma</button>
+      </div>
+
+      <div class="form-pane active" id="pane-nuevo">
+        <h3>Agregar Nuevo Producto</h3>
+        <div class="form-row">
+          <div class="form-group" style="flex:0 1 130px; min-width:110px">
+            <label>ID *</label>
+            <input type="number" value="8" readonly>
+          </div>
+          <div class="form-group"><label>Nombre *</label><input type="text" placeholder="Ej: Jamón" readonly></div>
+          <div class="form-group"><label>Categoría</label>
+            <select disabled>
+              <option>— Sin categoría —</option>
+              <option>Cárnicos</option>
+              <option>Bebidas</option>
+              <option>Confituras</option>
+              <option>Limpieza</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Unidad (U, Pq, Lb)</label>
+            <input type="text" value="U" readonly>
+          </div>
+          <div class="form-group"><label>Precio Costo ($)</label><input type="number" value="0" readonly></div>
+          <div class="form-group"><label>Precio Venta ($)</label><input type="number" value="0" readonly></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Stock Almacén</label><input type="number" value="0" readonly></div>
+          <div class="form-group"><label>Stock IPV</label><input type="number" value="0" readonly></div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn btn-primary">💾 Guardar Producto</button>
+        </div>
+      </div>
+
+      <div class="form-pane" id="pane-reabastecer">
+        <h3>Reabastecer producto existente</h3>
+        <p style="font-size:.78rem; color:var(--muted); margin:-4px 0 14px; line-height:1.5">
+          Registra una entrada de mercancía para un producto que ya existe. Se sumará al <b>almacén</b> y quedará en el Historial de Entradas.
+        </p>
+        <div class="reab-help">
+          <b>💡 Costo ponderado:</b> si el costo de esta entrada es distinto al que tienes guardado, el sistema calculará automáticamente un <b>costo promedio</b> entre el inventario actual (almacén + IPV) y lo que entra.
+        </div>
+        <div class="reab-filters">
+          <div class="search-wrap">
+            <input type="text" placeholder="Buscar por nombre o ID..." readonly>
+          </div>
+          <div class="cat-chips" id="reabChips"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex:2; min-width:200px">
+            <label>Producto a reabastecer *</label>
+            <select disabled><option>— Selecciona un producto —</option></select>
+          </div>
+        </div>
+        <div class="reab-info">
+          <div class="reab-info-row">
+            <span class="reab-info-lbl">Stock actual en almacén</span>
+            <span class="reab-info-val" id="reabStockActual">0</span>
+          </div>
+          <div class="reab-info-row">
+            <span class="reab-info-lbl">Costo actual del producto</span>
+            <span class="reab-info-val blue" id="reabCostoActual">$0.00</span>
+          </div>
+          <div class="reab-info-row">
+            <span class="reab-info-lbl">Precio de venta</span>
+            <span class="reab-info-val green" id="reabVentaActual">$0.00</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cantidad a agregar *</label>
+            <input type="number" value="1" readonly>
+          </div>
+          <div class="form-group">
+            <label>Costo de esta entrada ($)</label>
+            <input type="number" value="0" readonly>
+          </div>
+        </div>
+        <div class="reab-total-box">
+          <div>
+            <div class="lbl">Costo total de esta entrada</div>
+            <div style="font-size:.72rem; color:var(--muted); margin-top:4px" id="reabTotalDetalle">
+              Selecciona un producto para empezar.
+            </div>
+          </div>
+          <div class="val" id="reabTotal">$0.00</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px">
+          <button class="btn btn-success">📥 Registrar entrada</button>
+          <button class="btn btn-ghost">Limpiar</button>
+        </div>
+      </div>
+
+      <div class="form-pane" id="pane-mermas">
+        <h3>Registrar merma</h3>
+        <p style="font-size:.78rem; color:var(--muted); margin:-4px 0 14px; line-height:1.5">
+          Registra los productos que se dañaron, vencieron o perdiste. Se descuentan del inventario y quedan en el Historial de Mermas para tu control.
+        </p>
+        <div class="reab-help merma">
+          <b>⚠️ Merma:</b> pérdida de mercancía por daño, vencimiento o deterioro. No es una venta ni un retiro.
+        </div>
+        <div class="reab-filters">
+          <div class="search-wrap">
+            <input type="text" placeholder="Buscar por nombre o ID..." readonly>
+          </div>
+          <div class="cat-chips" id="merChips"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex:2; min-width:200px">
+            <label>Producto a dar de baja *</label>
+            <select disabled><option>— Selecciona un producto —</option></select>
+          </div>
+        </div>
+        <div class="reab-info">
+          <div class="reab-info-row">
+            <span class="reab-info-lbl">Stock en almacén</span>
+            <span class="reab-info-val" id="merStockAlmacen">0</span>
+          </div>
+          <div class="reab-info-row">
+            <span class="reab-info-lbl">Stock en IPV</span>
+            <span class="reab-info-val" id="merStockIpv">0</span>
+          </div>
+          <div class="reab-info-row">
+            <span class="reab-info-lbl">Costo del producto</span>
+            <span class="reab-info-val blue" id="merCosto">$0.00</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex:2">
+            <label>¿De dónde sale la merma? *</label>
+            <div class="origen-group">
+              <label class="origen-opt selected">
+                <span class="dot"></span>
+                <span>📦 Almacén</span>
+                <span class="origen-stock" id="merOrigenAlmacen">0 ud</span>
+              </label>
+              <label class="origen-opt">
+                <span class="dot"></span>
+                <span>🏪 IPV</span>
+                <span class="origen-stock" id="merOrigenIpv">0 ud</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Cantidad *</label><input type="number" value="1" readonly></div>
+          <div class="form-group">
+            <label>Motivo *</label>
+            <select disabled>
+              <option>Dañado</option>
+              <option>Vencido</option>
+              <option>Roto</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:2; min-width:180px">
+            <label>Nota (opcional)</label>
+            <input type="text" placeholder="Ej: se cayó al piso" readonly>
+          </div>
+        </div>
+        <div class="reab-total-box merma">
+          <div>
+            <div class="lbl">Pérdida estimada</div>
+            <div style="font-size:.72rem; color:var(--muted); margin-top:4px" id="merTotalDetalle">
+              Selecciona un producto para empezar.
+            </div>
+          </div>
+          <div class="val" id="merTotal">$0.00</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px">
+          <button class="btn btn-danger">⚠️ Registrar merma</button>
+          <button class="btn btn-ghost">Limpiar</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:12px; flex-wrap:wrap">
+      <label class="inline-check">
+        <input type="checkbox" disabled>
+        Ver productos archivados
+      </label>
+      <span style="font-size:.75rem; color:var(--muted)" id="inventarioCount"></span>
+    </div>
+
+    <div class="reab-filters">
+      <div class="search-wrap">
+        <input type="text" placeholder="Buscar por nombre o ID..." readonly>
+      </div>
+      <div class="cat-chips" id="invChips"></div>
+    </div>
+
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Producto</th><th>Categoría</th><th>U/M</th>
+          <th>Costo</th><th>Venta</th><th>Almacén</th><th>IPV</th><th style="text-align:right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="inventoryTableBody"></tbody>
+    </table>
+
+    <div class="inv-summary-bar" id="invSummaryBar"></div>
+
+    <div class="report-box" style="margin-top:20px">
+      <h3>💾 Copia de seguridad</h3>
+      <p style="font-size:.82rem; color:var(--muted); margin:0 0 12px">
+        Los datos viven solo en este navegador (IndexedDB). Exporta de vez en cuando para tener una copia.
+      </p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm">⬇ Exportar JSON</button>
+        <button class="btn btn-ghost btn-sm">⬆ Importar JSON</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORÍAS ============ -->
+  <section id="categorias" class="section">
+    <h2 class="page-title">🏷️ Categorías <span class="sub">Organiza tus productos como quieras</span></h2>
+    <div class="report-box" style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
+      <p style="margin:0; color:var(--muted); font-size:.85rem">
+        Ejemplos: Cárnicos, Bebidas, Confituras. Renómbralas o crea las que necesites.
+      </p>
+      <button class="btn btn-success">➕ Nueva Categoría</button>
+    </div>
+    <div class="cat-list" id="categoriasLista"></div>
+  </section>
+
+  <!-- ============ HISTORIALES ============ -->
+  <section id="historiales" class="section">
+    <h2 class="page-title">🧾 Historiales <span class="sub">Todas las operaciones del negocio</span></h2>
+    <div class="form-tabs">
+      <button class="form-tab active" data-hisotab="ventas">🛒 Ventas</button>
+      <button class="form-tab" data-hisotab="traslados">🔀 Traslados</button>
+      <button class="form-tab" data-hisotab="compras">📥 Entradas</button>
+      <button class="form-tab" data-hisotab="mermas">⚠️ Mermas</button>
+      <button class="form-tab" data-hisotab="retiros">🏠 Para mí</button>
+    </div>
+
+    <div class="form-pane active" id="hiso-ventas">
+      <div class="report-box">
+        <div class="form-row">
+          <div class="form-group"><label>Desde</label><input type="date" readonly></div>
+          <div class="form-group"><label>Hasta</label><input type="date" readonly></div>
+          <div class="form-group" style="display:flex; align-items:flex-end">
+            <button class="btn btn-ghost btn-block" style="margin:0">Limpiar filtro</button>
+          </div>
+        </div>
+        <div class="quick-dates">
+          <button>Hoy</button><button>Ayer</button><button>Últimos 7 días</button>
+          <button>Este mes</button><button>Todo</button>
+        </div>
+      </div>
+      <div id="ventasLista"></div>
+    </div>
+
+    <div class="form-pane" id="hiso-traslados">
+      <div class="report-box">
+        <div class="form-row">
+          <div class="form-group"><label>Desde</label><input type="date" readonly></div>
+          <div class="form-group"><label>Hasta</label><input type="date" readonly></div>
+          <div class="form-group" style="display:flex; align-items:flex-end">
+            <button class="btn btn-ghost btn-block" style="margin:0">Limpiar filtro</button>
+          </div>
+        </div>
+        <div class="quick-dates">
+          <button>Hoy</button><button>Ayer</button><button>Últimos 7 días</button>
+          <button>Este mes</button><button>Todo</button>
+        </div>
+      </div>
+      <div id="trasladosLista"></div>
+    </div>
+
+    <div class="form-pane" id="hiso-compras">
+      <div class="report-box">
+        <div class="form-row">
+          <div class="form-group"><label>Desde</label><input type="date" readonly></div>
+          <div class="form-group"><label>Hasta</label><input type="date" readonly></div>
+          <div class="form-group" style="display:flex; align-items:flex-end">
+            <button class="btn btn-ghost btn-block" style="margin:0">Limpiar filtro</button>
+          </div>
+        </div>
+        <div class="quick-dates">
+          <button>Hoy</button><button>Ayer</button><button>Últimos 7 días</button>
+          <button>Este mes</button><button>Todo</button>
+        </div>
+      </div>
+      <div id="comprasLista"></div>
+    </div>
+
+    <div class="form-pane" id="hiso-mermas">
+      <div class="report-box">
+        <div class="form-row">
+          <div class="form-group"><label>Desde</label><input type="date" readonly></div>
+          <div class="form-group"><label>Hasta</label><input type="date" readonly></div>
+          <div class="form-group" style="display:flex; align-items:flex-end">
+            <button class="btn btn-ghost btn-block" style="margin:0">Limpiar filtro</button>
+          </div>
+        </div>
+        <div class="quick-dates">
+          <button>Hoy</button><button>Ayer</button><button>Últimos 7 días</button>
+          <button>Este mes</button><button>Todo</button>
+        </div>
+      </div>
+      <div id="mermasLista"></div>
+    </div>
+
+    <div class="form-pane" id="hiso-retiros">
+      <div class="report-box">
+        <div class="form-row">
+          <div class="form-group"><label>Desde</label><input type="date" readonly></div>
+          <div class="form-group"><label>Hasta</label><input type="date" readonly></div>
+          <div class="form-group" style="display:flex; align-items:flex-end">
+            <button class="btn btn-ghost btn-block" style="margin:0">Limpiar filtro</button>
+          </div>
+        </div>
+        <div class="quick-dates">
+          <button>Hoy</button><button>Ayer</button><button>Últimos 7 días</button>
+          <button>Este mes</button><button>Todo</button>
+        </div>
+      </div>
+      <div id="retirosLista"></div>
+    </div>
+  </section>
+
+  <!-- ============ REPORTES ============ -->
+  <section id="reportes" class="section">
+    <h2 class="page-title">📊 Reportes <span class="sub">Genera imagen imprimible con todas las operaciones</span></h2>
+    <div class="report-box">
+      <div class="form-row">
+        <div class="form-group"><label>Desde</label><input type="date" readonly></div>
+        <div class="form-group"><label>Hasta</label><input type="date" readonly></div>
+      </div>
+      <div class="quick-dates" style="margin-bottom:14px">
+        <button>Hoy</button><button>Ayer</button><button>Últimos 7 días</button><button>Este mes</button>
+      </div>
+      <button class="btn btn-success">📊 Generar y Descargar Imagen</button>
+    </div>
+    <div class="report-box" id="reportePreview">
+      <h3>Vista Previa</h3>
+      <pre id="reporteTexto"></pre>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast-container" id="toasts"></div>
+
+<script>
+/* ============================================================
+   MERCADO FLO — DEMO ESTÁTICA
+   ============================================================
+   Este archivo es una demostración visual SIN LÓGICA DE NEGOCIO.
+
+   Lo único funcional es:
+   1) Navegación entre secciones del menú lateral.
+   2) Cambio entre pestañas dentro de cada sección.
+   3) Toast de aviso cuando se hace clic en cualquier botón.
+
+   NO existe: IndexedDB, localStorage, cálculos, validaciones,
+   persistencia, exportación real, generación de reportes,
+   gestión de carrito, costos ponderados, etc.
+
+   Todo lo que se muestra es HTML/CSS estático con datos
+   hardcodeados. Para hacer este sistema funcional, se necesita
+   escribir absolutamente toda la lógica desde cero.
+   ============================================================ */
+
+const $  = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+
+/* --- Utilidad de formato (solo visual) --- */
+const money = n => '$' + Number(n || 0).toFixed(2);
+
+/* --- Datos de ejemplo (hardcoded) --- */
+const DEMO_PRODS = [
+  {id:1, nombre:'Dobleta',      unidad:'U',  costo:50,  venta:80,  almacen:20, ipv:5,  cat:'Confituras'},
+  {id:2, nombre:'Paquete Soda', unidad:'U',  costo:100, venta:150, almacen:15, ipv:47, cat:'Bebidas'},
+  {id:3, nombre:'Panque',       unidad:'U',  costo:150, venta:250, almacen:10, ipv:18, cat:'Confituras'},
+  {id:4, nombre:'Sorbeto',      unidad:'U',  costo:80,  venta:120, almacen:30, ipv:0,  cat:'Bebidas'},
+  {id:5, nombre:'Jamón',        unidad:'Lb', costo:200, venta:280, almacen:8,  ipv:2,  cat:'Cárnicos'},
+  {id:6, nombre:'Chorizo',      unidad:'U',  costo:120, venta:180, almacen:15, ipv:3,  cat:'Cárnicos'},
+  {id:7, nombre:'Detergente',   unidad:'U',  costo:180, venta:250, almacen:6,  ipv:1,  cat:'Limpieza'}
+];
+
+const DEMO_CATS = ['Cárnicos','Bebidas','Confituras','Limpieza','Otros'];
+
+const DEMO_CART = [
+  {id:1, cant:3},
+  {id:2, cant:2},
+  {id:5, cant:1}
+];
+
+const DEMO_TRASLADO = [
+  {id:3, cant:5},
+  {id:6, cant:2}
+];
+
+const DEMO_RETIRO = [
+  {id:2, cant:1, origen:'Alm'},
+  {id:7, cant:2, origen:'IPV'}
+];
+
+/* --- Toast de demo --- */
+let ultimoToast = 0;
+function toastDemo(msg){
+  const ahora = Date.now();
+  if(ahora - ultimoToast < 800) return;
+  ultimoToast = ahora;
+
+  const c = $('#toasts');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg || '🔒 Versión demo — funciones deshabilitadas';
+  c.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity .3s, transform .3s';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    setTimeout(() => el.remove(), 320);
+  }, 2200);
+}
+
+/* --- Render: chips de categorías --- */
+function renderChips(container, activa){
+  container.innerHTML = ['Todos', ...DEMO_CATS].map(c => `
+    <button class="chip ${activa === c ? 'active' : ''}">${c}</button>
+  `).join('');
+}
+
+/* --- Render: POS grid --- */
+function renderPosGrid(){
+  const grid = $('#productGrid');
+  const disponibles = DEMO_PRODS.filter(p => p.ipv > 0);
+  grid.innerHTML = disponibles.map(p => {
+    const low = p.ipv <= 3;
+    return `
+      <div class="product-card">
+        <span class="pc-cat">${p.cat}</span>
+        <h4>${p.nombre}</h4>
+        <p class="pc-price">${money(p.venta)}</p>
+        <span class="pc-stock ${low?'low':''}">IPV: ${p.ipv} ${p.unidad}</span>
+      </div>`;
+  }).join('');
+}
+
+/* --- Render: POS cart --- */
+function renderCart(){
+  const tbody = $('#cartItems');
+  let total = 0;
+  tbody.innerHTML = DEMO_CART.map(item => {
+    const p = DEMO_PRODS.find(x => x.id === item.id);
+    const sub = p.venta * item.cant;
+    total += sub;
+    return `
+      <tr>
+        <td>
+          <div class="ci-name">${p.nombre}</div>
+          <div class="ci-price">${money(p.venta)} c/u · #${p.id}</div>
+        </td>
+        <td class="ci-qty">
+          <button class="mini" type="button">−</button>
+          <input type="text" class="ci-qty-input" value="${item.cant}" readonly>
+          <button class="mini" type="button">+</button>
+        </td>
+        <td class="ci-sub">${money(sub)}</td>
+        <td><button class="mini del" type="button">✕</button></td>
+      </tr>`;
+  }).join('');
+  $('#cartTotal').textContent = money(total);
+}
+
+/* --- Render: Traslados --- */
+function renderTraslados(){
+  const enIpv = DEMO_PRODS.filter(p => p.ipv > 0);
+  const unidades = enIpv.reduce((s,p) => s + p.ipv, 0);
+  const costo = enIpv.reduce((s,p) => s + p.ipv * p.costo, 0);
+  const venta = enIpv.reduce((s,p) => s + p.ipv * p.venta, 0);
+  const gan = venta - costo;
+
+  $('#ipvStats').innerHTML = `
+    <div class="stat-mini">
+      <span class="sm-lbl">Productos en IPV</span>
+      <div class="sm-val">${enIpv.length}</div>
+      <div class="sm-sub">${unidades} unidades en total</div>
+    </div>
+    <div class="stat-mini">
+      <span class="sm-lbl">Valor a costo</span>
+      <div class="sm-val blue">${money(costo)}</div>
+      <div class="sm-sub">Lo que costó traerlo</div>
+    </div>
+    <div class="stat-mini">
+      <span class="sm-lbl">Valor a venta</span>
+      <div class="sm-val green">${money(venta)}</div>
+      <div class="sm-sub">Si se vende todo</div>
+    </div>
+    <div class="stat-mini">
+      <span class="sm-lbl">Ganancia potencial</span>
+      <div class="sm-val orange">${money(gan)}</div>
+      <div class="sm-sub">Pendiente por realizar</div>
+    </div>`;
+
+  $('#ipvTableBody').innerHTML = enIpv.map(p => `
+    <tr>
+      <td class="id-col">#${p.id}</td>
+      <td>${p.nombre}</td>
+      <td>${p.cat}</td>
+      <td style="text-align:right">${p.ipv}</td>
+      <td style="text-align:right">${money(p.ipv * p.costo)}</td>
+      <td style="text-align:right; font-weight:700; color:var(--accent)">${money(p.ipv * p.venta)}</td>
+      <td style="text-align:right">
+        <button class="mini back" type="button">⬇</button>
+      </td>
+    </tr>`).join('');
+
+  const grid = $('#trasladoGrid');
+  const disponibles = DEMO_PRODS.filter(p => p.almacen > 0);
+  grid.innerHTML = disponibles.map(p => {
+    const yaElegidas = DEMO_TRASLADO.find(i => i.id === p.id)?.cant || 0;
+    const restantes = p.almacen - yaElegidas;
+    return `
+      <div class="product-card ${restantes <= 0 ? 'disabled' : ''}">
+        <span class="pc-cat">${p.cat}</span>
+        <h4>${p.nombre}</h4>
+        <p class="pc-price">Costo ${money(p.costo)}</p>
+        <span class="pc-stock ${restantes<=3?'low':''}">Almacén: ${p.almacen} ${p.unidad}${yaElegidas ? ` · en traslado: ${yaElegidas}` : ''}</span>
+      </div>`;
+  }).join('');
+
+  const tbody = $('#trasladoItems');
+  let totT = 0, uds = 0;
+  tbody.innerHTML = DEMO_TRASLADO.map(item => {
+    const p = DEMO_PRODS.find(x => x.id === item.id);
+    const sub = p.costo * item.cant;
+    totT += sub; uds += item.cant;
+    return `
+      <tr>
+        <td>
+          <div class="ci-name">${p.nombre}</div>
+          <div class="ci-price">${money(p.costo)} c/u · #${p.id}</div>
+        </td>
+        <td class="ci-qty">
+          <button class="mini" type="button">−</button>
+          <input type="text" class="ci-qty-input" value="${item.cant}" readonly>
+          <button class="mini" type="button">+</button>
+        </td>
+        <td class="ci-sub">${money(sub)}</td>
+        <td><button class="mini del" type="button">✕</button></td>
+      </tr>`;
+  }).join('');
+  $('#trasladoTotal').textContent = money(totT);
+  $('#trasladoMeta').textContent = `${uds} unidad${uds===1?'':'es'} · costo total`;
+}
+
+/* --- Render: Retiros --- */
+function renderRetiros(){
+  renderChips($('#retChips'), 'Todos');
+  const grid = $('#retGrid');
+  const disponibles = DEMO_PRODS.filter(p => (p.almacen + p.ipv) > 0);
+  grid.innerHTML = disponibles.map(p => {
+    const baja = p.ipv <= 3 || p.almacen <= 3;
+    return `
+      <div class="product-card">
+        <span class="pc-cat">${p.cat}</span>
+        <h4>${p.nombre}</h4>
+        <p class="pc-price">Costo ${money(p.costo)}</p>
+        <span class="pc-stock ${baja?'low':''}">IPV: ${p.ipv} · Alm: ${p.almacen} ${p.unidad}</span>
+      </div>`;
+  }).join('');
+
+  const tbody = $('#retItems');
+  let totR = 0, udsR = 0;
+  tbody.innerHTML = DEMO_RETIRO.map(item => {
+    const p = DEMO_PRODS.find(x => x.id === item.id);
+    const sub = p.costo * item.cant;
+    totR += sub; udsR += item.cant;
+    return `
+      <tr>
+        <td>
+          <div class="ci-name">${p.nombre}</div>
+          <div class="ci-price">${money(p.costo)} c/u · #${p.id}</div>
+        </td>
+        <td class="ci-qty">
+          <button class="mini" type="button">−</button>
+          <input type="text" class="ci-qty-input" value="${item.cant}" readonly>
+          <button class="mini" type="button">+</button>
+        </td>
+        <td style="text-align:center">
+          <select class="ci-qty-input" style="width:auto;max-width:none" disabled>
+            <option>${item.origen === 'IPV' ? '🏪 IPV' : '📦 Alm'}</option>
+          </select>
+        </td>
+        <td class="ci-sub">${money(sub)}</td>
+        <td><button class="mini del" type="button">✕</button></td>
+      </tr>`;
+  }).join('');
+  $('#retTotal').textContent = money(totR);
+  $('#retMeta').textContent = `${udsR} unidad${udsR===1?'':'es'}`;
+}
+
+/* --- Render: Inventario --- */
+function renderInventario(){
+  $('#inventarioCount').textContent = `${DEMO_PRODS.length} productos`;
+  $('#inventoryTableBody').innerHTML = DEMO_PRODS.map(p => {
+    const low = p.ipv <= 3 && p.ipv > 0;
+    const sin = p.ipv === 0;
+    return `
+      <tr class="${sin ? 'row-warn' : ''}">
+        <td class="id-col">#${p.id}</td>
+        <td>${p.nombre}</td>
+        <td>${p.cat}</td>
+        <td>${p.unidad}</td>
+        <td>${money(p.costo)}</td>
+        <td>${money(p.venta)}</td>
+        <td>${p.almacen}</td>
+        <td class="${low ? 'cell-low' : ''}">${p.ipv}${low ? ' ⚠' : ''}</td>
+        <td class="actions-col">
+          <button class="mini" type="button">📥</button>
+          <button class="mini" type="button">⬆️</button>
+          <button class="mini" type="button">✏️</button>
+          <button class="mini del" type="button">🗑️</button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  const conStock = DEMO_PRODS.filter(p => p.almacen > 0);
+  const totProd = conStock.length;
+  const totUds = conStock.reduce((s,p) => s + p.almacen, 0);
+  const totCosto = conStock.reduce((s,p) => s + p.almacen * p.costo, 0);
+  const totVenta = conStock.reduce((s,p) => s + p.almacen * p.venta, 0);
+  const totGan = totVenta - totCosto;
+
+  $('#invSummaryBar').innerHTML = `
+    <div>
+      <span class="isb-lbl">Productos en almacén</span>
+      <div class="isb-val">${totProd}</div>
+      <div class="isb-sub">${totUds} unidades en total</div>
+    </div>
+    <div>
+      <span class="isb-lbl">Valor a costo</span>
+      <div class="isb-val blue">${money(totCosto)}</div>
+      <div class="isb-sub">Dinero invertido</div>
+    </div>
+    <div>
+      <span class="isb-lbl">Valor a venta</span>
+      <div class="isb-val green">${money(totVenta)}</div>
+      <div class="isb-sub">Si se vende todo</div>
+    </div>
+    <div>
+      <span class="isb-lbl">Ganancia potencial</span>
+      <div class="isb-val orange">${money(totGan)}</div>
+      <div class="isb-sub">Pendiente por realizar</div>
+    </div>`;
+
+  renderChips($('#invChips'), 'Todos');
+  renderChips($('#reabChips'), 'Todos');
+  renderChips($('#merChips'), 'Todos');
+}
+
+/* --- Render: Categorías --- */
+function renderCategorias(){
+  const counts = [3, 2, 3, 1, 0];
+  $('#categoriasLista').innerHTML = DEMO_CATS.map((c, i) => `
+    <div class="cat-row">
+      <div>
+        <div class="cat-name">${c}</div>
+        <div class="cat-count">${counts[i]} producto${counts[i]===1?'':'s'}</div>
+      </div>
+      <div class="cat-actions">
+        <button class="mini" type="button">✏️</button>
+        <button class="mini del" type="button">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+/* --- Render: Historial Ventas --- */
+function renderHistorialVentas(){
+  const ventas = [
+    {fecha:'22/09/2026 10:42', items:3, uds:6, total:830, gan:380, detalle:[
+      {nombre:'Dobleta', cant:3, precio:80, subtotal:240},
+      {nombre:'Paquete Soda', cant:2, precio:150, subtotal:300},
+      {nombre:'Jamón', cant:1, precio:280, subtotal:280}
+    ]},
+    {fecha:'22/09/2026 09:18', items:2, uds:4, total:560, gan:260, detalle:[
+      {nombre:'Panque', cant:2, precio:250, subtotal:500},
+      {nombre:'Detergente', cant:1, precio:250, subtotal:250}
+    ]},
+    {fecha:'21/09/2026 18:05', items:5, uds:11, total:1450, gan:650, detalle:[]},
+    {fecha:'21/09/2026 12:30', items:4, uds:8, total:1120, gan:490, detalle:[]},
+    {fecha:'20/09/2026 16:50', items:6, uds:14, total:1830, gan:820, detalle:[]}
+  ];
+  const tot = ventas.reduce((s,v) => s + v.total, 0);
+  const gan = ventas.reduce((s,v) => s + v.gan, 0);
+  $('#ventasLista').innerHTML = `
+    <div class="ventas-summary">
+      <div><span class="vs-lbl">Ventas</span><b>${ventas.length}</b></div>
+      <div><span class="vs-lbl">Ingresos</span><b class="green">${money(tot)}</b></div>
+      <div><span class="vs-lbl">Ganancia</span><b class="green">${money(gan)}</b></div>
+    </div>
+    ${ventas.map(v => `
+      <div class="venta-row">
+        <div class="venta-head">
+          <div>
+            <div class="venta-fecha">${v.fecha}</div>
+            <div class="venta-meta">${v.items} ítem(s) · ${v.uds} ud.</div>
+          </div>
+          <div class="venta-amount">
+            <div class="va-total">${money(v.total)}</div>
+            <div class="va-gan">Gan: ${money(v.gan)}</div>
+          </div>
+        </div>
+        ${v.detalle.length ? `
+          <details class="venta-det">
+            <summary>Ver detalle del ticket</summary>
+            <table class="det-table">
+              <thead><tr><th>Producto</th><th>Cant</th><th>Precio</th><th style="text-align:right">Subtotal</th></tr></thead>
+              <tbody>
+                ${v.detalle.map(d => `
+                  <tr>
+                    <td>${d.nombre}</td>
+                    <td>${d.cant}</td>
+                    <td>${money(d.precio)}</td>
+                    <td style="text-align:right; font-weight:700">${money(d.subtotal)}</td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </details>
+        ` : ''}
+      </div>`).join('')}`;
+}
+
+/* --- Render: Historial Traslados --- */
+function renderHistorialTraslados(){
+  $('#trasladosLista').innerHTML = `
+    <div class="tr-row">
+      <div class="tr-head">
+        <div>
+          <div class="tr-fecha">22/09/2026 09:15</div>
+          <div class="tr-meta"><span class="tr-badge in">Almacén → IPV</span> · 3 productos</div>
+        </div>
+        <div class="tr-units"><b>15</b><span>unidades · ${money(2100)} costo</span></div>
+      </div>
+    </div>
+    <div class="tr-row">
+      <div class="tr-head">
+        <div>
+          <div class="tr-fecha">21/09/2026 17:40</div>
+          <div class="tr-meta"><span class="tr-badge out">IPV → Almacén</span> · 1 producto</div>
+        </div>
+        <div class="tr-units"><b>4</b><span>unidades · ${money(320)} costo</span></div>
+      </div>
+    </div>
+    <div class="tr-row">
+      <div class="tr-head">
+        <div>
+          <div class="tr-fecha">20/09/2026 08:00</div>
+          <div class="tr-meta"><span class="tr-badge in">Almacén → IPV</span> · 5 productos</div>
+        </div>
+        <div class="tr-units"><b>38</b><span>unidades · ${money(4200)} costo</span></div>
+      </div>
+    </div>`;
+}
+
+/* --- Render: Historial Compras --- */
+function renderHistorialCompras(){
+  $('#comprasLista').innerHTML = `
+    <div class="stat-mini-grid">
+      <div class="stat-mini">
+        <span class="sm-lbl">Total invertido</span>
+        <div class="sm-val blue">${money(3450)}</div>
+        <div class="sm-sub">3 entradas</div>
+      </div>
+      <div class="stat-mini">
+        <span class="sm-lbl">Productos nuevos</span>
+        <div class="sm-val green">1</div>
+        <div class="sm-sub">primera entrada</div>
+      </div>
+      <div class="stat-mini">
+        <span class="sm-lbl">Reabastecimientos</span>
+        <div class="sm-val">2</div>
+        <div class="sm-sub">entradas de stock</div>
+      </div>
+    </div>
+    <div class="entrada-row">
+      <div class="entrada-head">
+        <div>
+          <div class="entrada-fecha">22/09/2026 08:30</div>
+          <div class="entrada-meta">
+            <span class="entrada-badge reposicion">Reabastecimiento</span>
+            · 2 productos · 30 ud.
+          </div>
+        </div>
+        <div class="entrada-amount">
+          <div class="ea-total">${money(2100)}</div>
+          <div class="ea-det">costo total de la entrada</div>
+        </div>
+      </div>
+    </div>
+    <div class="entrada-row">
+      <div class="entrada-head">
+        <div>
+          <div class="entrada-fecha">21/09/2026 15:20</div>
+          <div class="entrada-meta">
+            <span class="entrada-badge nuevo">Nuevo</span>
+            · 1 producto · 15 ud.
+          </div>
+        </div>
+        <div class="entrada-amount">
+          <div class="ea-total">${money(900)}</div>
+          <div class="ea-det">costo total de la entrada</div>
+        </div>
+      </div>
+    </div>
+    <div class="entrada-row">
+      <div class="entrada-head">
+        <div>
+          <div class="entrada-fecha">20/09/2026 11:00</div>
+          <div class="entrada-meta">
+            <span class="entrada-badge reposicion">Reabastecimiento</span>
+            · 1 producto · 5 ud.
+          </div>
+        </div>
+        <div class="entrada-amount">
+          <div class="ea-total">${money(450)}</div>
+          <div class="ea-det">costo total de la entrada</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* --- Render: Historial Mermas --- */
+function renderHistorialMermas(){
+  $('#mermasLista').innerHTML = `
+    <div class="stat-mini-grid">
+      <div class="stat-mini">
+        <span class="sm-lbl">Total perdido</span>
+        <div class="sm-val red">${money(450)}</div>
+        <div class="sm-sub">2 mermas</div>
+      </div>
+      <div class="stat-mini">
+        <span class="sm-lbl">Unidades perdidas</span>
+        <div class="sm-val red">3</div>
+        <div class="sm-sub">productos dados de baja</div>
+      </div>
+    </div>
+    <div class="merma-row">
+      <div class="merma-head">
+        <div>
+          <div class="merma-fecha">22/09/2026 14:15</div>
+          <div class="merma-meta"><span class="merma-badge vencido">Vencido</span> · 1 producto · 2 ud.</div>
+        </div>
+        <div class="merma-amount">
+          <div class="ma-total">${money(300)}</div>
+          <div class="ma-det">pérdida total</div>
+        </div>
+      </div>
+    </div>
+    <div class="merma-row">
+      <div class="merma-head">
+        <div>
+          <div class="merma-fecha">20/09/2026 09:40</div>
+          <div class="merma-meta"><span class="merma-badge danado">Dañado</span> · 1 producto · 1 ud.</div>
+        </div>
+        <div class="merma-amount">
+          <div class="ma-total">${money(150)}</div>
+          <div class="ma-det">pérdida total</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* --- Render: Historial Retiros --- */
+function renderHistorialRetiros(){
+  $('#retirosLista').innerHTML = `
+    <div class="stat-mini-grid">
+      <div class="stat-mini">
+        <span class="sm-lbl">Retiros</span>
+        <div class="sm-val purple">2</div>
+        <div class="sm-sub">registros</div>
+      </div>
+      <div class="stat-mini">
+        <span class="sm-lbl">Unidades retiradas</span>
+        <div class="sm-val purple">3</div>
+        <div class="sm-sub">productos tomados</div>
+      </div>
+      <div class="stat-mini">
+        <span class="sm-lbl">Costo total</span>
+        <div class="sm-val purple">${money(460)}</div>
+        <div class="sm-sub">valor al costo del inventario</div>
+      </div>
+    </div>
+    <div class="retiro-row">
+      <div class="retiro-head">
+        <div>
+          <div class="retiro-fecha">22/09/2026 13:20</div>
+          <div class="retiro-meta">
+            <span class="retiro-badge">🏠 Para mí</span>
+            · 2 productos · 2 ud.
+          </div>
+        </div>
+        <div class="retiro-amount">
+          <div class="ra-total">${money(280)}</div>
+          <div class="ra-det">costo del retiro</div>
+        </div>
+      </div>
+    </div>
+    <div class="retiro-row">
+      <div class="retiro-head">
+        <div>
+          <div class="retiro-fecha">21/09/2026 19:05</div>
+          <div class="retiro-meta">
+            <span class="retiro-badge">🏠 Para mí</span>
+            · 1 producto · 1 ud.
+          </div>
+        </div>
+        <div class="retiro-amount">
+          <div class="ra-total">${money(180)}</div>
+          <div class="ra-det">costo del retiro</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* --- Render: Reportes (vista previa) --- */
+function renderReportes(){
+  $('#reporteTexto').textContent =
+`=== MERCADO FLO — REPORTE ===
+Período: 20/09/2026 → 22/09/2026
+----------------------------------------
+VENTAS: 5
+  Ingresos: $5790.00
+  Ganancia: $2600.00
+----------------------------------------
+ENTRADAS: 3
+  Productos nuevos: 1
+  Reabastecimientos: 2
+  Total invertido: $3450.00
+----------------------------------------
+MERMAS: 2
+  Total perdido: $450.00
+----------------------------------------
+RETIROS (Para mí): 2
+  Costo total: $460.00
+----------------------------------------
+PRODUCTO               CANT    INGRESO     GANANCIA
+Dobleta                   3      $240.00      $90.00
+Paquete Soda              2      $300.00     $100.00
+Panque                    2      $500.00     $200.00
+Jamón                     1      $280.00      $80.00
+Detergente                1      $250.00      $70.00
+----------------------------------------
+TRASLADOS:
+  Almacén → IPV: 2 (53 unidades)
+  IPV → Almacén: 1 (4 unidades)
+----------------------------------------
+TOTAL INGRESOS: $5790.00
+TOTAL GANANCIA: $2600.00
+TOTAL INVERTIDO: $3450.00
+TOTAL PERDIDO (mermas): $450.00
+TOTAL RETIRADO: $460.00
+BALANCE NETO: $-1760.00
+`;
+}
+
+/* --- Render inicial --- */
+function renderTodo(){
+  renderChips($('#catChipsPos'), 'Todos');
+  renderChips($('#catChipsTraslado'), 'Todos');
+  renderPosGrid();
+  renderCart();
+  renderTraslados();
+  renderRetiros();
+  renderInventario();
+  renderCategorias();
+  renderHistorialVentas();
+  renderHistorialTraslados();
+  renderHistorialCompras();
+  renderHistorialMermas();
+  renderHistorialRetiros();
+  renderReportes();
+}
+
+/* ============================================================
+   INTERCEPTAR CLICS DE BOTONES (excepto navegación y pestañas)
+   ============================================================ */
+document.addEventListener('click', e => {
+  /* Dejar pasar los botones de navegación lateral */
+  if(e.target.closest('.nav-btn')) return;
+
+  /* Dejar pasar las pestañas de cada sección */
+  if(e.target.closest('.form-tab')) return;
+
+  /* Dejar pasar los <details> (para poder ver los tickets) */
+  if(e.target.closest('summary')) return;
+
+  /* Dejar pasar los botones del banner (por si acaso) */
+  if(e.target.closest('.demo-banner')) return;
+
+  /* Dejar pasar el enlace "volver al portafolio" */
+  if(e.target.closest('.volver')) return;
+
+  /* Cualquier otro botón/chip/tarjeta => toast demo */
+  const el = e.target.closest('button, .chip, .product-card, .mini');
+  if(!el) return;
+  e.preventDefault();
+  e.stopPropagation();
+  toastDemo();
+}, true);
+
+/* --- Bloquear teclado en inputs (excepto Tab) --- */
+document.addEventListener('keydown', e => {
+  if(e.target.matches('input, select')){
+    if(e.key !== 'Tab') e.preventDefault();
+  }
+}, true);
+
+/* ============================================================
+   NAVEGACIÓN ENTRE SECCIONES (sí funciona)
+   ============================================================ */
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    const sec = document.getElementById(btn.dataset.section);
+    if(sec) sec.classList.add('active');
+    const main = document.querySelector('.main-content');
+    if(main) main.scrollTop = 0;
+  });
+});
+
+/* ============================================================
+   PESTAÑAS INTERNAS (sí funcionan)
+   ============================================================ */
+document.querySelectorAll('.form-tab[data-formtab]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.form-tab[data-formtab]').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    ['nuevo','reabastecer','mermas'].forEach(k => {
+      const p = document.getElementById('pane-' + k);
+      if(p) p.classList.toggle('active', k === tab.dataset.formtab);
+    });
+  });
+});
+
+document.querySelectorAll('.form-tab[data-tratab]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.form-tab[data-tratab]').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    ['traslados','retiros'].forEach(k => {
+      const p = document.getElementById('pane-' + k);
+      if(p) p.classList.toggle('active', k === tab.dataset.tratab);
+    });
+  });
+});
+
+document.querySelectorAll('.form-tab[data-hisotab]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.form-tab[data-hisotab]').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    ['ventas','traslados','compras','mermas','retiros'].forEach(k => {
+      const p = document.getElementById('hiso-' + k);
+      if(p) p.classList.toggle('active', k === tab.dataset.hisotab);
+    });
+  });
+});
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderTodo();
+  console.log(
+    '%c🔒 Mercado Flo — DEMO ESTÁTICA (sin lógica)',
+    'background:#f39c12;color:#fff;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:12px'
+  );
+  console.log('Navegación entre secciones: ✅ habilitada');
+  console.log('Todo lo demás: 🔒 deshabilitado (solo visual)');
+});
+</script>
+</body>
+</html>
